@@ -35,27 +35,27 @@ def cadastro(request):
     if request.method == 'POST': 
         form = CadastroForms(request.POST)
 
-        if form.is_valid():# validação do formulário
-            if form["senha_1"].value() != form["senha_2"].value(): #validação de senhas iguais
-                messages.error(request, 'As senhas são diferentes!')
-                return redirect ('cadastro')
+        if form.is_valid():
+                        if form["senha_1"].value() != form["senha_2"].value():
+                                messages.error(request, 'Senhas não são iguais')
+                                return redirect ('cadastro')
+                                                
+                        nome=form['nome_cadastro'].value()
+                        email=form['email'].value()
+                        senha=form['senha_1'].value()
 
-            nome=form['nome_cadastro'].value() #armazenando as informações do forms em variáveis
-            email=form['email'].value()
-            senha=form['senha_1'].value()
+                        if User.objects.filter(username=nome).exists():
+                                messages.error(request, 'Usuário já existente')
+                                return redirect('cadastro')
 
-            if User.objects.filter(username=nome).exists(): #verificação se o usuário existe
-                messages.error(request, 'Usuário existente')
-                return redirect('cadastro')
-
-            usuario = User.objects.create_user( #criamos esse novo usuário com as informações inseridas no formulário.
-                username=nome,
-                email=email,
-                password=senha
-            )
-            usuario.save()
-            messages.success(request, 'Login feito vom sucesso!')
-            return redirect('login')
+                        usuario = User.objects.create_user(
+                                username=nome,
+                                email=email,
+                                password=senha
+                        )
+                        usuario.save()
+                        messages.success(request, 'Cadastro efetuado com sucesso!')
+                        return redirect('login')
 
     return render(request, 'usuarios/cadastro.html', {'form': form})
 
