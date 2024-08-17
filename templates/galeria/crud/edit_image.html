@@ -1,8 +1,9 @@
 {% extends 'shared/base.html' %}
 {% load static %}
 {% block content %}
+
             <section class="galeria" style="margin-left: 5em">
-                <form action="{% url 'cadastro' %}" method="POST">
+                <form action="{% url 'edit_image' foto_id %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         {% for field in form.visible_fields %}
@@ -11,10 +12,10 @@
                             {{ field }}
                         </div>
                         {% endfor %}
-                        </div>
-                        <div>
-                            <button class="btn btn-success col-12" style="padding: top 5px;">Cadastrar</button>
-                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success col-12" style="padding: top 5px;">Editar Fotografia</button>
+                    </div>
                 </form>
             </section>
         </main>
